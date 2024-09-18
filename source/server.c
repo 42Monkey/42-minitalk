@@ -1,11 +1,21 @@
 #include "../include/minitalk.h"
 
+/*
+** Function to display an error message and exit the program
+** @param message: the error message to display
+*/
 void	error(const char *message)
 {
 	write(2, message, ft_strlen(message));
 	exit (1);
 }
 
+/*
+** Signal handler function to receive and process signals
+** @param signal: the signal received
+** @param info: additional information about the signal
+** @param ucontext: context information for the signal handler
+*/
 void	handle_signal(int signal, siginfo_t *info, void *ucontext)
 {
 	static int	bit;
@@ -27,6 +37,12 @@ void	handle_signal(int signal, siginfo_t *info, void *ucontext)
 		error ("Error: No acknowledgement to client\n.");
 }
 
+/*
+** Main function to set up the server and handle incoming signals
+** It displays the server's PID and sets up signal handlers for SIGUSR1 and SIGUSR2
+** It then enters an infinite loop to pause and wait for signals
+** @return 0 on successful execution
+*/
 int	main(void)
 {
 	int					pid;
@@ -40,9 +56,9 @@ int	main(void)
 	ft_putnbr_fd(pid, 1);
 	ft_putchar_fd('\n', 1);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
-		error ("Error: SERVER SIGUSER1\n");
+		error ("Error: SERVER SIGUSR1\n");
 	if (sigaction(SIGUSR2, &sa, NULL) == -1)
-		error ("Error: SERVER SIGUSER2\n");
+		error ("Error: SERVER SIGUSR2\n");
 	while (1)
 	{
 		pause();
