@@ -1,19 +1,35 @@
 #include "../include/minitalk.h"
 
+/**
+ *  Declare and initialize a global variable g_status
+ */
 volatile sig_atomic_t	g_status = 0;
 
+/**
+ * Signal handler function to set g_status to 1
+ * @param signum The signal number
+ */
 void	handle_signal(int signum)
 {
 	(void)signum;
 	g_status = 1;
 }
 
+/**
+ * Function to display an error message and exit the program
+ * @param message The error message to display
+ */
 void	error(const char *message)
 {
 	write(2, message, ft_strlen(message));
 	exit (1);
 }
 
+/**
+ * Function to send a byte to the server
+ * @param pid The process ID of the server
+ * @param byte The byte to send
+ */
 void	send_byte(int pid, unsigned char byte)
 {
 	int	bit;
@@ -39,6 +55,11 @@ void	send_byte(int pid, unsigned char byte)
 	}
 }
 
+/**
+ * Function to send a message to the server
+ * @param pid The process ID of the server
+ * @param message The message to send
+ */
 void	send_message(int pid, const char *message)
 {
 	size_t	i;
@@ -53,6 +74,12 @@ void	send_message(int pid, const char *message)
 	send_byte(pid, '\n');
 }
 
+/**
+ * Main function to handle command line arguments and send a message to the server
+ * @param argc The number of command line arguments
+ * @param argv The array of command line arguments
+ * @return 0 on success
+ */
 int	main(int argc, char **argv)
 {
 	int		pid;
