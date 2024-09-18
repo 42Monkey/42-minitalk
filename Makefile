@@ -1,27 +1,30 @@
-## ARGUMENTS
+## Project: Minitalk
+## Description: Makefile for compiling the Minitalk client and server programs
+
+## Arguments
 CLIENT_NAME		= client
 SERVER_NAME		= server
 
-## DIRECTORIES
+## Directories
 SRC_DIR			= source
 INC_DIR			= include
 
-## SOURCE FILES
+## Source Files
 CLIENT_SRCS		= $(SRC_DIR)/client.c
 SERVER_SRCS		= $(SRC_DIR)/server.c
 UTILS_SRCS		= $(SRC_DIR)/utils.c
 
-## OBJECT FILES
+## Object Files
 CLIENT_OBJS		= $(CLIENT_SRCS:.c=.o) $(UTILS_SRCS:.c=.o)
 SERVER_OBJS		= $(SERVER_SRCS:.c=.o) $(UTILS_SRCS:.c=.o)
 
-## COMPILATION & FLAGS
+## Compilation & Flags
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -pedantic -g -Wunreachable-code -I $(INC_DIR)
 AR 			= ar rcs
 RM			= rm -f
 
-## TARGETS
+## Targets
 
 all:				$(CLIENT_NAME) $(SERVER_NAME)
 
