@@ -48,6 +48,7 @@ Key steps in the client:
 ## Resources
 
 ### Articles
+- [Bamdeb Ghosh - How To Use Signal Handlers in C Language?](https://linuxhint.com/signal_handlers_c_programming_language/)
 - [Mia Combeau - Sending and Intercepting a Signal in C](https://www.codequoi.com/en/sending-and-intercepting-a-signal-in-c/)
 
 ### Videos
@@ -56,3 +57,8 @@ Key steps in the client:
 - [CodeVault - Handling Signals](https://www.youtube.com/watch?v=jF-1eFhyz1U)
 - [CodeVault - Communicating Between Processes Using Signals](https://www.youtube.com/watch?v=PErrlOx3LYE)
 - [Indronil Banerjee - Linux Sigaction System Call Programming](https://www.youtube.com/watch?v=_1TuZUbCnX0)
+
+### Testing
+- [Francinette](https://github.com/xicodomingues/francinette)
+- [Lorem Ipsum](https://www.lipsum.com/)
+- [Get Emoji](https://getemoji.com/)
