@@ -1,51 +1,99 @@
 # Minitalk
 
-Minitalk is a client-server communication program designed to demonstrate inter-process communication (IPC) using signals in C. This project is part of the 42 school curriculum, focusing on low-level system programming concepts such as signal handling, bit manipulation, and memory management.
+A simple client-server program that demonstrates communication between processes using UNIX signals.
 
-## How It Works
+## Overview
 
-The Minitalk project consists of two parts: a server and a client.
+This project consists of two programs that work together:
 
-### Server
+#### Server
+- Starts first and displays its Process ID (PID)
+- Waits for incoming messages
+- When it receives a message, displays it immediately
+- Can handle messages from multiple clients without needing to restart
 
-- The server starts by printing its PID (Process ID) and waits for signals.
-- It receives signals from the client and reconstructs the binary data into characters, then prints the message.
+#### Client
+- Takes two inputs:
+  - The server's PID
+  - The message to send
+- Sends the message to the server
+- Waits for confirmation that the message was received
 
-### Client
+The communication between the client and server is done entirely through UNIX signals.
 
-- The client takes a message, converts each character into binary, and sends the binary data bit-by-bit to the server using two signals:
-  - SIGUSR1: Represents a binary 0.
-  - SIGUSR2: Represents a binary 1.
+### Installation
+```
+git clone https://github.com/42Monkey/42-minitalk.git minitalk
+cd minitalk
+make					# compiles with -Wall -Wextra -Werror
+```
 
-## Communication Process
+### How to Use
+1. Start the server to display its PID:
 
-- The server listens for SIGUSR1 and SIGUSR2 signals using the sigaction system call.
-- The client sends each character of the message to the server as a sequence of signals.
-- The server assembles the bits received from the signals into characters and prints the message.
+```
+./server
+```
 
-## Code Explanation
+2. Send a message using the client:
 
-### server.c
+```
+./client [PID] [message]
+```
 
-The server listens for SIGUSR1 and SIGUSR2 signals. Each signal corresponds to a bit (0 for SIGUSR1, 1 for SIGUSR2). The server shifts these bits into position to form characters and prints the result. Once a full character is reconstructed, it is displayed in the terminal.
+- Example
+```
+./client 12345 "Hello World!"
+./client 56789 "こんにちは"
+./client 11235 "🍌🐵"
+```
 
-Key steps in the server:
+### Explanations
 
-1. Signal handling: The server uses sigaction to set up handlers for SIGUSR1 and SIGUSR2.
-2. Reconstructing characters: For each signal received, the server shifts the bits left and accumulates them into a complete character.
-3. Displaying the message: After receiving a full character, it is printed to the terminal.
+#### Signals
+Minitalk uses two UNIX signals for communication:
+- `SIGUSR1`: represents binary 0
+- `SIGUSR2`: represents binary 1
 
-### client.c
+Example: sending letter 'A'
+ASCII 'A' (65) is binary: 01000001
 
-The client takes a string and converts each character to its binary representation. For each bit, it sends SIGUSR1 or SIGUSR2 to the server, depending on whether the bit is 0 or 1. The kill function is used to send the signals to the server’s PID.
+```
+1. SIGUSR1 (0)
+2. SIGUSR2 (1)
+3. SIGUSR1 (0)
+4. SIGUSR1 (0)
+5. SIGUSR1 (0)
+6. SIGUSR1 (0)
+7. SIGUSR1 (0)
+8. SIGUSR2 (1)
+```
 
-Key steps in the client:
+Each character of the message is transmitted bit by bit using these signals.
 
-1. Binary conversion: The client converts each character into a sequence of bits.
-2. Signal transmission: Each bit is sent as either SIGUSR1 (for 0) or SIGUSR2 (for 1).
-3. Message delivery: The client sends the message bit-by-bit to the server, waiting briefly between each signal.
+#### Bitwise Operations
+- The server reconstructs each character by shifting and combining received bits
+- For each bit received:
+  - Left shift the current byte
+  - Set or clear the rightmost bit based on the signal
+  - After 8 bits, display the complete character
 
-## Resources
+#### Global Variable
+The project uses one global variable (allowed) in the client: `volatile sig_atomic_t g_status`
+
+This variable ensures reliable communication by:
+- Tracking whether the server acknowledged receiving each bit
+- Preventing data races in signal handlers
+- Synchronizing the client's sending pace with the server's processing
+The `volatile` and `sig_atomic_t` type are used to ensure proper behavior when accessing the variable from signal handlers.
+
+### Features
+- Server can receive messages from multiple clients
+- Uses UNIX signals for communication
+- Fast message transmission and display
+- Supports text messages in any language
+- Full unicode support (emoji, special characters, different alphabets)
+- Handle errors
 
 ### Articles
 - [Bamdeb Ghosh - How To Use Signal Handlers in C Language?](https://linuxhint.com/signal_handlers_c_programming_language/)
