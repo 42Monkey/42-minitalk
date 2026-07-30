@@ -1,7 +1,7 @@
 # 42 Cursus : minitalk
 
 <p align="center">
-  <a href="https://github.com/your_login/minitalk">
+  <a href="https://github.com/42Monkey/minitalk">
     <img src="https://github.com/ayogun/42-project-badges/raw/main/badges/minitalkm.png" alt="42 minitalk Badge" width="160">
   </a>
 </p>
